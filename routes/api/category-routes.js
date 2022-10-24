@@ -1,25 +1,15 @@
 const router = require('express').Router();
-//const { UPSERT } = require('sequelize').types().lib();
 const { Category, Product } = require('../../models');
 
 // The `/api/categories` endpoint
 
 router.get('/', async (req, res) => {
   // find all categories
-  // be sure to include its associated Products
+  // includes its associated Products
   try {
     const categoryData = await Category.findAll({
       include: [{model: Product}],
-    //   attributes: {
-    //     include: [
-    //       [
-    //       sequelize.literal(
-    //         `(SELECT * FROM product WHERE product.category_id = category.id)`
-    //       ),
-    //       'Products',
-    //     ],
-    //   ],
-    //  },
+
     });
     res.status(200).json(categoryData);
   } catch (err){
@@ -30,20 +20,11 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   // find one category by its `id` value
-  // be sure to include its associated Products
+  // includes its associated Products
   try {
     const categoryData = await Category.findByPk(req.params.id, {
       include: [{model: Product}],
-      // attributes: {
-      //   include: [
-      //     [
-      //       sequelize.literal(
-      //         `(SELECT * FROM product WHERE product.category_id = category.id)`
-      //       ),
-      //       'Products',
-      //     ],
-      //   ],
-      // },
+
     }); 
     if (!categoryData){
       res.status(404).json({message: 'No category found with that id'});
